@@ -2,12 +2,15 @@
 // common code to include when access to the TM database is needed
 // in PHP code
 
-// this should point to /home/www/courses/metal/lib/tm.conf on blizzard
+// this should point to /home/www/courses/metal/lib/tm.conf on noreaster
 $tmconffile = fopen($_SERVER['DOCUMENT_ROOT']."/metal/lib/tm.conf", "r");
 $tmdbname = chop(fgets($tmconffile));
 $tmdbuser = chop(fgets($tmconffile));
 $tmdbpasswd = chop(fgets($tmconffile));
 $tmdbhost = chop(fgets($tmconffile));
+// HERE maps API id and code
+$tmhereid = chop(fgets($tmconffile));
+$tmherecode = chop(fgets($tmconffile));
 fclose($tmconffile);
 
 // make the connection
