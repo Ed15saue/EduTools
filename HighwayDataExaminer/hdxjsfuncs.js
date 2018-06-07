@@ -159,7 +159,7 @@ function highlighter (x, color){
     document.getElementById(x).style.color = color;
 }
 function resetHighlight(x){
-    document.getElementById(x).style.color = "black";
+    highlighter(x, "black");
 }
 function clearForm(f){
     //enables the the start/pause and algorithm selection buttons/drop down
@@ -2065,31 +2065,31 @@ var hdxDijkstraAV = {
     name: "Dijkstra's Algorithm",
     description: "Dijkstra's algorithm for single-source shortest paths.",
 
-    // pseudocode
+    // pseudocode change to &emscp;
     code:`
 <div>
 <div id = 1> G = (V,E) is the graph</div>
-<div>s <- starting vertex</div>
-<div>e <- ending vertex</div>
-<div>T <- table of places found</div>
-<div>PQ <- priority queue of candidates</div>
-<div>PQ.add(0, (s, null))</div>
-<div>while (PQ.notEmpty() and e not in T) {</div>
-  <div>(dist, (to, via)) <- PQ.remove()</div>
-  <div>if (to not in T) {</div>
-     <div>T.add(to, via)</div>
-     <div>for each neighbor w of to {</div>
-        <div>if (w not visited) {</div>
-           <div>PQ.add(dist+len(to,w), (w, edge(to-w)))</div>
+<div id = 2>s <- starting vertex</div>
+<div id = 3>e <- ending vertex</div>
+<div id = 4>T <- table of places found</div>
+<div id = 5>PQ <- priority queue of candidates</div>
+<div id = 5>PQ.add(0, (s, null))</div>
+<div id = 6>while (PQ.notEmpty() and e not in T) {</div>
+  <div id = 7>&nbsp;&nbsp;&nbsp;&nbsp;(dist, (to, via)) <- PQ.remove()</div>
+  <div id = 7>&nbsp;&nbsp;&nbsp;&nbsp;if (to not in T) {</div>
+     <div id = 9>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T.add(to, via)</div>
+     <div id = 10>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for each neighbor w of to {</div>
+        <div id = 11>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (w not visited) {</div>
+           <div id = 12>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PQ.add(dist+len(to,w), (w, edge(to-w)))</div>
         }
-     }
+     } 
   }
 }
-<div>if (e in T) {</div>
-   <div>use T to report shortest path</div>
+<div id = 13>if (e in T) {</div>
+   <div id = 14>&nbsp;&nbsp;&nbsp;&nbsp;use T to report shortest path</div>
 }
-<div>else {</div>
-   <div>report no path exists</div>
+<div id = 15>else {</div>
+   <div id = 16>&nbsp;&nbsp;&nbsp;&nbsp;report no path exists</div>
 }
 </div>`,
 
@@ -2131,11 +2131,15 @@ var hdxDijkstraAV = {
 
     // required algorithm start method for Dijkstra's
     start() {
+        resetHighlight(1);
         highlighter(1, "blue");
+        highlighter(2, "blue");
+        highlighter(3,"blue");
 	// vertex indices for the start and end of the traversal
 	this.startingVertex = document.getElementById("startPoint").value;
+        
 	this.endingVertex = document.getElementById("endPoint").value;
-	
+	        
 	if (this.startingVertex == this.endingVertex) {
 	    alert("Start and End vertices must be different!");
 	    return;
@@ -2144,6 +2148,9 @@ var hdxDijkstraAV = {
 	// construct the priority queue
 	this.pq = new HDXLinear(hdxLinearTypes.PRIORITY_QUEUE,
 				"Priority Queue");
+        highlighter(4,"blue");
+        highlighter(5,"blue");
+        highlighter(6,"blue");
 
 	this.pq.setComparator(
 	    function(a, b) {
@@ -2359,13 +2366,18 @@ var hdxDijkstraAV = {
 	    // work our way back up the table from vertex to vertex
 	    // along the shortest path
 	    while (place != this.startingVertex) {
+            highlighter(6,"blue");
 		let spEntry = this.shortestPaths[spIndex];
 		while (place != spEntry.vIndex) {
 		    // hide line, it's not part of the path
 		    if (place != this.endingVertex) {
 			let tr = document.getElementById("dijkstraSP" + spIndex);
+                
 			tr.style.display = "none";
 		    }
+            resetHighlight(6);
+            highlighter(7, "red");
+            
 		    spIndex--;
 		    spEntry = this.shortestPaths[spIndex];
 		}
@@ -2373,6 +2385,7 @@ var hdxDijkstraAV = {
 		// we are at the next place on the path, update vertex
 		updateMarkerAndTable(place, this.visualSettings.shortestPath,
 				     5, false);
+            
 		// and update edge to get here
 		updatePolylineAndTable(spEntry.connection,
 				       this.visualSettings.shortestPath,
@@ -2402,6 +2415,8 @@ var hdxDijkstraAV = {
     
 	// case 3: continue the search at the next place from the pq
 	let nextToVisit = this.pq.remove();
+        resetHighlight(6);
+        highlighter(8, "red");
 
 	// mark the vertex and edge to it as being visited
 	updateMarkerAndTable(nextToVisit.vIndex, visualSettings.visiting,
