@@ -504,6 +504,8 @@ function labelClickHDX(i) {
 
     // standard map center/infowindow display
     map.panTo([waypoints[i].lat, waypoints[i].lon]);
+
+    markers[i].openPopup();
 }
 
 
@@ -3519,8 +3521,8 @@ function processContents(fileContents) {
     newEle.setAttribute("id", "newEle");
     newEle.innerHTML = pointboxContents;
     document.getElementById('contents_table').appendChild(newEle);
-    createDataTable("#waypoints");
-    createDataTable("#connection");
+    //createDataTable("#waypoints");
+    //createDataTable("#connection");
     updateMap();   
 }
 

@@ -76,7 +76,7 @@ ENDOFSTUFF;
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"/>
-<link rel="stylesheet" type="text/css" href="http://tm.teresco.org/css/travelMapping.css"/>
+<link rel="stylesheet" type="text/css" href="http://travelmapping.net/css/travelMapping.css"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style type="text/css">
 #controlbox {
@@ -251,20 +251,6 @@ padding:0px;
 	padding-left: 30px;
 }
 </style>
-  <link rel="stylesheet" href="/leaflet/leaflet.css" />
-  <script src="/leaflet/leaflet.js"></script>
-  <script src="/leaflet/leaflet-providers.js"></script>
-  <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script
- src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"
-  type="text/javascript"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-<link rel="stylesheet" href="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.css">
-<script src="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.js"></script>
 <!-- config file to find libs from a TM installation -->
 <?php
   $hdxconffile = fopen("hdx.conf", "r");
@@ -273,7 +259,15 @@ padding:0px;
   echo "var tmliburl = \"$tmliburl\";";
   echo "</script>\n";
   fclose($hdxconffile);
+
+  require "../lib/tmphpfuncs.php";
+  tm_common_js();
 ?>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<link rel="stylesheet" href="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.css">
+<script src="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.js"></script>
 <!-- load in needed JS functions -->
 <?php
   echo "<script src=\"".$tmliburl."tmjsfuncs.js\" type=\"text/javascript\"></script>\n";
