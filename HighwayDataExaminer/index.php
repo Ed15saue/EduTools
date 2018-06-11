@@ -1,9 +1,53 @@
-<?php
-require (dirname(__FILE__)."/dbConnect.php");
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 
+<head>
+    <!--
+    Highway Data Examiner (HDX) page
+    Load and view data files related to Travel Mapping (TM) related
+    academic data sets. (Formerly used Clinched Highway Mapping (CHM)
+    data.)
+    Primary Author: Jim Teresco, Siena College, The College of Saint Rose
+    Additional authors: Razie Fathi, Arjol Pengu, Maria Bamundo, Clarice Tarbay,
+        Michael Dagostino, Abdul Samad, Eric Sauer
+
+    (Pre-git) Modification History:
+    2011-06-20 JDT  Initial implementation
+    2011-06-21 JDT  Added .gra support and checkbox for hidden marker display
+    2011-06-23 JDT  Added .nmp file styles
+    2011-08-30 JDT  Renamed to HDX, added more styles
+    2013-08-14 JDT  Completed update to Google Maps API V3
+    2016-06-27 JDT  Code reorganization, page design updated based on TM
+-->
+<title>Highway Data Examiner</title>
+<?php
+  if (!file_exists("tmlib/tmphpfuncs.php")) {
+    echo "<h1 style='color: red'>Could not find file <tt>".__DIR__."/tmlib/tmphpfuncs.php</tt> on server.  <tt>".__DIR__."/tmlib</tt> should contain or be a link to a directory that contains a Travel Mapping <tt>lib</tt> directory.</h1>";
+    exit;
+  }
+
+ require "tmlib/tmphpfuncs.php";
+?>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<link rel="stylesheet" href="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.css">
+<!-- bring in common JS libraries from TM for maps, etc. -->
+<?php tm_common_js(); ?>
+<script src="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.js"></script>
+<!-- load in needed JS functions -->
+<?php
+  if (!file_exists("tmlib/tmjsfuncs.js")) {
+    echo "<h1 style='color: red'>Could not find file <tt>".__DIR__."/tmlib/tmpjsfuncs.js</tt> on server.  <tt>".__DIR__."/tmlib</tt> should contain or be a link to a directory that contains a Travel Mapping <tt>lib</tt> directory.</h1>";
+    exit;
+  }
+?>
+<script src="tmlib/tmjsfuncs.js" type="text/javascript"></script>
+<script src="hdxjsfuncs.js" type="text/javascript"></script>
+
+<?php
 // function to generate the file load html
 function hdx_load_file_entries() {
-  global $tmdb;
   echo <<<ENDOFSTUFF
 	  <tr><td id="selects" class="loadcollapse">
 		Load METAL graph: (select filters then press "Get Graph List") <br>
@@ -25,12 +69,12 @@ function hdx_load_file_entries() {
 		<select id = "categoryOptions">
 				<option value="all">All Graphs</option>
 ENDOFSTUFF;
-  $result = $tmdb->query("SELECT * FROM graphTypes");
+  $result = tmdb_query("SELECT * FROM graphTypes");
 
   while ($row = $result->fetch_array()) {
      echo "<option value=\"".$row['category']."\">".$row['descr']."</option>\n";
   }
-  $result->close();
+  $result->free();
   echo <<<ENDOFSTUFF
 		</select>
 		<br>
@@ -53,24 +97,6 @@ ENDOFSTUFF;
 ENDOFSTUFF;
 }
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-
-<head>
-    <!--
-    Highway Data Examiner (HDX) page
-    Load and view data files related to Travel Mapping (TM) related
-    academic data sets. (Formerly used Clinched Highway Mapping (CHM)
-    data.)
-    Author: Jim Teresco, Siena College, The College of Saint Rose
-    Modification History:
-    2011-06-20 JDT  Initial implementation
-    2011-06-21 JDT  Added .gra support and checkbox for hidden marker display
-    2011-06-23 JDT  Added .nmp file styles
-    2011-08-30 JDT  Renamed to HDX, added more styles
-    2013-08-14 JDT  Completed update to Google Maps API V3
-    2016-06-27 JDT  Code reorganization, page design updated based on TM
--->
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -251,29 +277,6 @@ padding:0px;
 	padding-left: 30px;
 }
 </style>
-<!-- config file to find libs from a TM installation -->
-<?php
-  $hdxconffile = fopen("hdx.conf", "r");
-  $tmliburl = chop(fgets($hdxconffile));
-  echo "<script type=\"application/javascript\">";
-  echo "var tmliburl = \"$tmliburl\";";
-  echo "</script>\n";
-  fclose($hdxconffile);
-
-  require "../lib/tmphpfuncs.php";
-  tm_common_js();
-?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-<link rel="stylesheet" href="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.css">
-<script src="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.js"></script>
-<!-- load in needed JS functions -->
-<?php
-  echo "<script src=\"".$tmliburl."tmjsfuncs.js\" type=\"text/javascript\"></script>\n";
-?>
-<script src="hdxjsfuncs.js" type="text/javascript"></script>
-<title>Highway Data Examiner</title>
 </head>
 <body onload="loadmap(); hdxAV.initOnLoad();" ondragover="allowdrop(event)" ondrop="drop(event)">
 <p class="menubar">
@@ -367,4 +370,4 @@ padding:0px;
         </div>
         </body>
 </html>
-<?php $tmdb->close(); ?>
+<?php tmdb_close(); ?>
