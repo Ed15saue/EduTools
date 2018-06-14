@@ -2,17 +2,21 @@
 // read information about graphs from our DB
 $jsonArr = json_decode($_POST['params'], true);
 
-require (dirname(__FILE__)."/dbConnect.php");
+// need to buffer and clean output since tmphpfuncs generates
+// some output that breaks the JSON output
+ob_start();
+require "tmlib/tmphpfuncs.php";
+ob_end_clean();
 
 // DB connection made, now make our request
 $response = array('text'=>array(), 'values'=>array(), 'vertices'=>array(), 'edges'=>array());
 
 if($jsonArr['order'] == "alpha")
-	$result = $tmdb->query("SELECT * FROM graphs ORDER BY filename ASC");
+	$result = tmdb_query("SELECT * FROM graphs ORDER BY filename ASC");
 else if($jsonArr['order'] == "small")
-	$result = $tmdb->query("SELECT * FROM graphs ORDER BY vertices ASC");	
+	$result = tmdb_query("SELECT * FROM graphs ORDER BY vertices ASC");	
 else if($jsonArr['order'] == "large")
-	$result = $tmdb->query("SELECT * FROM graphs ORDER BY vertices DESC");
+	$result = tmdb_query("SELECT * FROM graphs ORDER BY vertices DESC");
 
 	if ($jsonArr['restrict'] == "collapsed"){
 		while ($row = $result->fetch_array()) {
@@ -46,7 +50,7 @@ else if($jsonArr['order'] == "large")
 		
 	} 
 
-	$result->close();
+	$result->free();
 	$tmdb->close();
 	echo json_encode($response);
 ?>

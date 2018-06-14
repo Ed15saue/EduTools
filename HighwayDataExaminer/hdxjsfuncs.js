@@ -12,6 +12,8 @@
 // some globals used here (map, waypoints, markers, etc) come from
 // tmjsfuncs.js
 
+// start UI redesign 2018-06-14
+
 // variables declared here are HDX-specific global variables
 
 // Essentially an enum of possible states of the simulation, used to
