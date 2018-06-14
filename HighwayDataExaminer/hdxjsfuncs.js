@@ -3229,10 +3229,9 @@ function createSidePanelBtn() {
     document.body.appendChild(showPanel);
 }
 */
-
-var sidePanelContent = ["Legend"];
+var t = document.getElementById("selected");
+var sidePanelContent = [t];
 function sidePanel() {
-
     var div = document.createElement("div");
     div.setAttribute("id", "sidePanel");
     var xButton = document.createElement("a");
@@ -4177,6 +4176,27 @@ function toggleTable() {
 	if ($("#connection").length != 0 || $("#waypoints").length != 0)
 	    document.getElementById("connection").parentNode.parentNode.style.display = "none";
     }
+}
+library(shiny)
+library(shinydashboard)
+
+if(interactive()){
+  shinyApp(
+    ui <- dashboardPage(
+      dashboardHeader(title = "My Dashboard"),
+      dashboardSidebar(width = "300px",
+                       br(),
+                       br(),
+                       tableOutput("data1")),
+      dashboardBody()
+    ),
+
+    server = function(input, output, session){
+      output$data1 <- renderTable({
+        head(mtcars[,1:4])
+      })
+    }
+  )
 }
 
 // get the selected algorithm from the AlgorithmSelection menu

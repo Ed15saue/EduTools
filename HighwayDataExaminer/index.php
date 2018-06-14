@@ -298,7 +298,7 @@ padding:0px;
 <div id="selected" draggable="true"  ondragstart="drag(event)" style="left:10px; top:70px; position:absolute; z-index:2000;">
 
 </div>
-<div id="options">
+<div id="options" class="popup">
   <table id="optionsTable" class="gratable">
     <thead>
       <tr><th>Load/Map Options</th></tr>
