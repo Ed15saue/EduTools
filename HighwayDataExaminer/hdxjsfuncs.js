@@ -155,12 +155,7 @@ var hdxAV = {
  * General AV functions
  **********************************************************************/
 // speedChanger dropdown callback
-function highlighter (x, color){
-    document.getElementById(x).style.color = color;
-}
-function resetHighlight(x){
-    highlighter(x, "black");
-}
+
 function clearForm(f){
     //enables the the start/pause and algorithm selection buttons/drop down
     document.getElementById("startPauseButton").disabled = false;
@@ -2133,10 +2128,6 @@ var hdxDijkstraAV = {
 
     // required algorithm start method for Dijkstra's
     start() {
-        resetHighlight(1);
-        highlighter(1, "blue");
-        highlighter(2, "blue");
-        highlighter(3,"blue");
 	// vertex indices for the start and end of the traversal
 	this.startingVertex = document.getElementById("startPoint").value;
         
@@ -2150,9 +2141,6 @@ var hdxDijkstraAV = {
 	// construct the priority queue
 	this.pq = new HDXLinear(hdxLinearTypes.PRIORITY_QUEUE,
 				"Priority Queue");
-        highlighter(4,"blue");
-        highlighter(5,"blue");
-        highlighter(6,"blue");
 
 	this.pq.setComparator(
 	    function(a, b) {
@@ -2234,7 +2222,7 @@ var hdxDijkstraAV = {
     // add a DijkstraSP to the list of shortest paths and to
     // the table of shortest path entries
     addToShortestPaths(v) {
-        resetHighlight(1);
+        
         
 	
 	let newtr = document.createElement("tr");
@@ -2368,7 +2356,6 @@ var hdxDijkstraAV = {
 	    // work our way back up the table from vertex to vertex
 	    // along the shortest path
 	    while (place != this.startingVertex) {
-            highlighter(6,"blue");
 		let spEntry = this.shortestPaths[spIndex];
 		while (place != spEntry.vIndex) {
 		    // hide line, it's not part of the path
@@ -2377,8 +2364,7 @@ var hdxDijkstraAV = {
                 
 			tr.style.display = "none";
 		    }
-            resetHighlight(6);
-            highlighter(7, "red");
+            
             
 		    spIndex--;
 		    spEntry = this.shortestPaths[spIndex];
@@ -2417,8 +2403,7 @@ var hdxDijkstraAV = {
     
 	// case 3: continue the search at the next place from the pq
 	let nextToVisit = this.pq.remove();
-        resetHighlight(6);
-        highlighter(8, "red");
+        
 
 	// mark the vertex and edge to it as being visited
 	updateMarkerAndTable(nextToVisit.vIndex, visualSettings.visiting,
@@ -3637,38 +3622,51 @@ function errorHandler(evt) {
 // floating point numbers, all space-separated, indicating the
 // coordinates of any shaping points along the edge
 //
+
 function parseTMGContents(fileContents) {
     
     var lines = fileContents.replace(/\r\n/g,"\n").split('\n');
     var header = lines[0].split(' ');
     if (header[0] != "TMG") {
-	return '<table class="gratable"><thead><tr><th>Invalid TMG file (missing TMG marker on first line)</th></tr></table>';
+	return '<table class="table"><thead class = "thead-dark"><tr><th scope="col">Invalid TMG file (missing TMG marker on first line)</th></tr></table>';
     }
     if (header[1] != "1.0") {
-	return '<table class="gratable"><thead><tr><th>Unsupported TMG file version (' + header[1] + ')</th></tr></table>';
+	return '<table class="table"><thead class = "thead-dark"><tr><th scope="col">Unsupported TMG file version (' + header[1] + ')</th></tr></table>';
     }
     if ((header[2] != "simple") && (header[2] != "collapsed")) {
-	return '<table class="gratable"><thead><tr><th>Unsupported TMG graph format (' + header[2] + ')</th></tr></table>';
+	return '<table class="table"><thead class = "thead-dark"><tr><th scope="col">Unsupported TMG graph format (' + header[2] + ')</th></tr></table>';
     }
     var counts = lines[1].split(' ');
     var numV = parseInt(counts[0]);
     var numE = parseInt(counts[1]);
-    var summaryInfo = '<table class="gratable"><thead><tr><th>' + numV + " waypoints, " + numE + " connections.</th></tr></table>";
+    var summaryInfo = '<table class="table-sm"><thead class = "thead-dark"><tr><th scope="col">' + numV + " waypoints, " + numE + " connections.</th></tr></table>";
     
-    var vTable = '<table id="waypoints" class="gratable"><thead><tr><th colspan="3">Waypoints</th></tr><tr><th>#</th><th>Coordinates</th><th>Waypoint Name</th></tr></thead><tbody>';
+    
+    
+    var vTable = '<table id="waypoints" class="table-sm"><thead class = "thead-dark"><tr><th scope="col" colspan="3">Waypoints</th></tr><tr><th>#</th><th scope="col">Coordinates</th><th scope="col">Waypoint Name</th></tr></thead><tbody>';
     
     waypoints = new Array(numV);
     for (var i = 0; i < numV; i++) {
 	var vertexInfo = lines[i+2].split(' ');
 	waypoints[i] = new Waypoint(vertexInfo[0], vertexInfo[1], vertexInfo[2], "", new Array());
-	vTable += '<tr id="waypoint' + i +'" onmouseover = "hoverV('+i+', false)" onmouseout = "hoverEndV('+i+', false)" onclick = "labelClickHDX('+i+')" ><td>' + i +
-	    '</td><td>(' + parseFloat(vertexInfo[1]).toFixed(3) + ',' +
-	    parseFloat(vertexInfo[2]).toFixed(3) + ')</td><td>'
-	    + waypoints[i].label + '</td></tr>';
+        
+        var vsubstr =  parseFloat(vertexInfo[1]).toFixed(3) + ',' +
+	    parseFloat(vertexInfo[2]).toFixed(3) 
++'</td>' + '<td style ="word-break:break-all;">' + (waypoints[i].label).substring(0,10);
+   
+        var vsubstrL =  parseFloat(vertexInfo[1]).toFixed(3) + ',' +
+	    parseFloat(vertexInfo[2]).toFixed(3) 
++ waypoints[i].label;
+        
+	vTable += '<tr id="waypoint' + i + '" title = "' + vsubstrL + '"'  +'" onmouseover = "hoverV('+i+', false)" onmouseout = "hoverEndV('+i+', false)" onclick = "labelClickHDX('+i+')" ><td style ="word-break:break-all;">' + i +'</td>';
+        
+        var vstr = '<td style ="word-break:break-all;"' ; 
+        var vstr2 = vstr +'>' + vsubstr + '</td></tr>';
+	    vTable += vstr2;
     }
-    vTable += '</tbody></table>';
+        vTable += '</tbody></table>';
     
-    var eTable = '<table  id="connection" class="gratable"><thead><tr  ><th colspan="3">Connections</th></tr><tr><th>#</th><th>Route Name(s)</th><th>Endpoints</th></tr></thead><tbody>';
+    var eTable = '<table  id="connection" class="table-dark"><thead class = "thead-dark"><tr><th scope="col" colspan="3">Connections</th></tr><tr><th scope="col">#</th><th scope="col">Route Name(s)</th><th scope="col">Endpoints</th></tr></thead><tbody>';
     graphEdges = new Array(numE);
     for (var i = 0; i < numE; i++) {
 	var edgeInfo = lines[i+numV+2].split(' ');
@@ -3684,16 +3682,27 @@ function parseTMGContents(fileContents) {
 	// add this new edge to my endpoint vertex adjacency lists
 	waypoints[newEdge.v1].edgeList.push(newEdge);
 	waypoints[newEdge.v2].edgeList.push(newEdge);
-	
-	eTable += '<tr onmouseover="hoverE(event,'+i+')" onmouseout="hoverEndE(event,'+i+')" onclick="edgeClick('+i+')" id="connection' + i + '" class="v_' + firstNode + '_' + secondNode + '"><td>' + i + '</td><td>' + edgeInfo[2] + '</td><td>'
-	    + edgeInfo[0] + ':&nbsp;' + waypoints[newEdge.v1].label +
+	var test = edgeInfo[0] + ':&nbsp;' + waypoints[newEdge.v1].label +
 	    ' &harr; ' + edgeInfo[1] + ':&nbsp;'
-	    + waypoints[newEdge.v2].label + '</td></tr>';
++ waypoints[newEdge.v2].label;
+	var subst = '<td style ="word-break:break-all;">'
+	    + edgeInfo[0] + ':&nbsp;' + (waypoints[newEdge.v1].label).substring(0,5) +
+	    ' &harr; ' + edgeInfo[1] + ':&nbsp;'
++ (waypoints[newEdge.v2].label).substring(0,5) + '</td>';
+        
+        
+        
+        eTable += '<tr title = "' + test + '"' + 'onmouseover="hoverE(event,'+i+')" onmouseout="hoverEndE(event,'+i+')" onclick="edgeClick('+i+')" id="connection' + i + '" class="v_' + firstNode + '_' + secondNode + '"><td id = "connectname" style ="word-break:break-all;" >' + i + '</td>';
 	
-	graphEdges[i] = newEdge;
+        var subst2 = '<td style ="word-break:break-all;"'; 
+        var subst3 = subst2 + '>' + edgeInfo[2] + subst;
+	   eTable += subst3;
+        
+        graphEdges[i] = newEdge;
 	// record edge index in GraphEdge structure
 	newEdge.edgeListIndex = i;
     }
+    
     eTable += '</tbody></table>';
     genEdges = false;
     usingAdjacencyLists = true;
@@ -3719,7 +3728,7 @@ function parseGRAContents(fileContents) {
     var numE = parseInt(counts[1]);
     var sideInfo = '<table  class="gratable"><thead><tr><th>' + numV + " waypoints, " + numE + " connections.</th></tr></table>";
 
-    var vTable = '<table class="gratable"><thead><tr><th colspan="3">Waypoints</th></tr><tr><th>#</th><th>Coordinates</th><th>Waypoint Name</th></tr></thead><tbody>';
+    var vTable = '<table class="gratable"><thead><tr><th colspan="3">Waypoints</th></tr><tr><th>#</th><th>Coordinates</th></tr></thead><tbody>';
 
     waypoints = new Array(numV);
     for (var i = 0; i < numV; i++) {
@@ -3729,7 +3738,7 @@ function parseGRAContents(fileContents) {
 	    '</td><td>(' + parseFloat(vertexInfo[1]).toFixed(3) + ',' +
 	    parseFloat(vertexInfo[2]).toFixed(3) + ')</td><td>'
 	    + "<a onclick=\"javascript:labelClickHDX(" + i + ");\">"
-	    + waypoints[i].label + "</a></td></tr>"
+	    
     }
     vTable += '</tbody></table>';
 
@@ -4177,27 +4186,7 @@ function toggleTable() {
 	    document.getElementById("connection").parentNode.parentNode.style.display = "none";
     }
 }
-library(shiny)
-library(shinydashboard)
 
-if(interactive()){
-  shinyApp(
-    ui <- dashboardPage(
-      dashboardHeader(title = "My Dashboard"),
-      dashboardSidebar(width = "300px",
-                       br(),
-                       br(),
-                       tableOutput("data1")),
-      dashboardBody()
-    ),
-
-    server = function(input, output, session){
-      output$data1 <- renderTable({
-        head(mtcars[,1:4])
-      })
-    }
-  )
-}
 
 // get the selected algorithm from the AlgorithmSelection menu
 // (factored out here to avoid repeated code)

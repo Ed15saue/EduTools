@@ -74,8 +74,9 @@ ENDOFSTUFF;
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"/>
+
+<!--<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>-->
+<!--<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"/>-->
 <link rel="stylesheet" type="text/css" href="http://travelmapping.net/css/travelMapping.css"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style type="text/css">
@@ -90,6 +91,10 @@ ENDOFSTUFF;
   overflow:auto;
   padding:5px;
 }
+    #contents_table{
+        
+    overflow-y: hidden;
+    }
 #map {
   position: absolute;
   top:25px;
@@ -102,7 +107,7 @@ ENDOFSTUFF;
 }
 #selected {
   position: relative;
-  overflow: scroll;
+  overflow: auto;
   display: inline-block;
   max-width: 50%;
   max-height: 85%;
@@ -136,19 +141,19 @@ height: 1px;
 #contents_table{
   display: inline-block;
   position: absolute;
-  right: 42px;
-  top: 70px;
+  right: 10px;
+  top: 10px;
   bottom: 10px;
-  overflow: scroll;
+  overflow: auto;
   max-width: 50%;
-  max-height: 85%;
+  max-height: 90%;
   opacity: .95;
 }
 #pseudoTable{
   position: absolute;
   padding: 5px;
   bottom: 150px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   max-width: 33%;
   opacity: .95;
 }
@@ -190,7 +195,7 @@ padding:0px;
     top: 0;
     left: 0;
     background-color: #111;
-    overflow-x: hidden;
+    overflow-x: auto;
     transition: 0.5s;
     padding-top: 60px;
 }
@@ -250,6 +255,7 @@ padding:0px;
 #boxContainer{
 	padding-left: 30px;
 }
+
 </style>
 <!-- config file to find libs from a TM installation -->
 <?php
@@ -268,6 +274,7 @@ padding:0px;
       rel="stylesheet">
 <link rel="stylesheet" href="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.css">
 <script src="/leaflet/BeautifyMarker/leaflet-beautify-marker-icon.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <!-- load in needed JS functions -->
 <?php
   echo "<script src=\"".$tmliburl."tmjsfuncs.js\" type=\"text/javascript\"></script>\n";
@@ -363,7 +370,7 @@ padding:0px;
           </select>
 
         </div>
-        <div id="contents_table" draggable="true"  ondragstart="drag(event)" style="top:70px; left:70%; position: absolute; z-index:9999;">
+        <div id="contents_table" draggable="false" style="top:70px; left:80%; position: absolute; z-index:9999;">
         </div>
         </body>
 </html>
